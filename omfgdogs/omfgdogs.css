@@ -1,0 +1,33 @@
+@media screen and (min-width: 992px) {
+	body {
+		background: url(omfgdogs.gif) repeat; 
+	}
+	#warning {
+		visibility: hidden;
+	}
+}
+
+@media screen and (max-width: 992px) {
+	#creditText {
+		visibility: hidden;
+	}
+}
+
+#creditText {
+	position: absolute;
+	bottom: 0;
+	right: 0;
+	background-color: white;
+}
+a {
+	text-decoration: none;
+	color: black;
+	font-size: 48px;
+	font-family: Impact;
+}
+a:hover{
+	color: red;
+}
+a:visited{
+	color: black;
+}
