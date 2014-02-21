@@ -26,7 +26,7 @@ function draw() {
 			ctx.drawImage(img, 0, 0, 60, 44, 170, 400, 120, 88);
 
 			// Draw 5 birds
-			ctx.drawImage(img, 0, 115, 40, 40, 500, 300, 80, 80);
+			ctx.drawImage(img, 0, 115, 40, 40, 310, 290, 80, 80);
 			ctx.drawImage(img, 40, 150, 40, 40, 400, 150, 80, 80);
 			ctx.drawImage(img, 130, 150, 40, 40, 300, 50, 80, 80);
 			ctx.drawImage(img, 206, 110, 40, 40, 600, 40, 80, 80);
