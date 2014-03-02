@@ -17,18 +17,14 @@
 				var list = document.getElementById('list');
 				
 				var div = document.createElement('div');
+				div.id = "sections";
 
-				var comp = document.createElement('p');
-				var loc = document.createElement('p');
-				var pos = document.createElement('p');
+				var job = document.createElement('p');
+				job.id = "sectionText";
 
-				comp.innerHTML = "Company: " + parsed[i].company;
-				loc.innerHTML = "Location: " + parsed[i].location;
-				pos.innerHTML = "Position: " + parsed[i].position;
+				job.innerHTML = "Company: " + parsed[i].company + "</br>" + "Location: " + parsed[i].location + "</br>" + "Position: " + parsed[i].position + "</br>";
 
-				div.appendChild(comp);	
-				div.appendChild(loc);
-				div.appendChild(pos);
+				div.appendChild(job);	
 
 				list.appendChild(div);
 			}

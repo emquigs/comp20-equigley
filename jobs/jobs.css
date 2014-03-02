@@ -1,8 +1,25 @@
-p {
-	font-family: Tahoma, sans-serif;
+html {
+	background: url(Lawn.JPG) no-repeat center center fixed; 
+    background-size: cover;
 }
 
-div {
-	background-color: #87CEEB;
+p {
+	font-family: Tahoma, sans-serif;
+	text-align: center;
+}
+
+#sections {
+	background-color: rgba(255,255,255,0.80);
 	border-radius: 30px;
+	border: 1px solid black;
+	margin: 10px 10px 10px 10px;
+}
+
+#list {
+	padding-left: 300px;
+	padding-right: 300px;
+}
+
+#sectionText{
+	margin-right: 20px;
 }
