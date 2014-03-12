@@ -12,23 +12,23 @@
 			
 			parsed = JSON.parse(str);
 
-			for (var i=0; i < parsed.length; i++) {
+			parsed.forEach(function(item) {
 
 				var list = document.getElementById('list');
 				
 				var div = document.createElement('div');
-				div.id = "sections";
+				div.className = "sections";
 
 				var job = document.createElement('p');
-				job.id = "sectionText";
+				job.className = "sectionText";
 
-				job.innerHTML = "Company: " + parsed[i].company + "</br>" + "Location: " + parsed[i].location + "</br>" + "Position: " + parsed[i].position + "</br>";
+				job.innerHTML = "Company: " + item.company + "</br>" + "Location: " + item.location + "</br>" + "Position: " + item.position + "</br>";
 
 				div.appendChild(job);	
 
 				list.appendChild(div);
-			}
 
+			});
 		}
 	</script>
 </head>
