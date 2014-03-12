@@ -21,14 +21,12 @@ function getMyLocation() {
         navigator.geolocation.getCurrentPosition(function(position) {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
-            console.log("1" + lat + " " + lng);
+            renderMap();
         });
-    console.log("2" + lat + " " + lng);
     }
     else {
         alert("Sorry, geolocation is not supported by your web browser.  -MGMT");
     }
-    renderMap();
 }
 
 function renderMap() {
