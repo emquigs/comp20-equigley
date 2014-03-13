@@ -26,14 +26,14 @@ function getMyLocation() {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
             requestSchedule();
-            findClosestStation();
-            renderMap();
         });
     }
     else {
         alert("Sorry, geolocation is not supported by your web browser.  -MGMT");
     }
 }
+
+var errorMessage = "";
 
 function renderMap() {
     me = new google.maps.LatLng(lat, lng);
@@ -47,7 +47,7 @@ function renderMap() {
     selfMarker.setMap(map);
 
     google.maps.event.addListener(selfMarker, 'click', function() {
-            infowindow.setContent(selfMarker.title);
+            infowindow.setContent(selfMarker.title + errorMessage);
             infowindow.open(map, selfMarker);
         });
 }
@@ -458,24 +458,30 @@ function findClosestStation() {
 
 function findClosest() {
 
-    var maxDist = 0;
+  var maxDist = 0;
 
-    parsedLines.forEach(function (station) {
-        if (maxDist < station.distance) {
-            maxDist = station.distance;
-        }
-    });
+  rodeoline = rodeoLine.charAt(0).toUpperCase() + rodeoLine.substring(1);
 
-    var minDist = maxDist;
+  parsedLines.forEach(function (station) {
+    if (station.Line == rodeoline) {
+      if (maxDist < station.distance) {
+          maxDist = station.distance;
+      }
+    }
+  });
 
-    parsedLines.forEach(function (station) {
+  var minDist = maxDist;
 
-        if (minDist > station.distance) {
-            minDist = station.distance;
-            haversine = station.Station;
-            stationDist = minDist;
-        }
-    });
+  parsedLines.forEach(function (station) {
+    if (station.Line == rodeoline) {
+      if (minDist > station.distance) {
+          minDist = station.distance;
+          haversine = station.Station;
+          stationDist = minDist;
+      }
+    }
+  });
+  renderMap();
 }
 
 function makeLines() {
@@ -517,7 +523,7 @@ function makeLines() {
                 strokeWeight: 2
             });
             Path.setMap(map);
-            if (color == "Red") {
+            if (color == "red") {
               redPath2 = new google.maps.Polyline({
                 path: redArr2,
                 geodesic: true,
@@ -533,6 +539,11 @@ function makeLines() {
 
 function makeStations() {
 
+  var train;
+  var destination;
+  var time;
+  var stops;
+
   rodeoline = rodeoLine.charAt(0).toUpperCase() + rodeoLine.substring(1);
   parsedLines.forEach(function (station) {
       if (station.Line == rodeoline) {
@@ -547,6 +558,23 @@ function makeStations() {
           marker.setMap(map);
 
           google.maps.event.addListener(marker, 'click', function() {
+
+            content = '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
+            content.id = "schedule";
+            for (var i = 0; i < tSchedule['schedule'].length; i++) {
+                train = tSchedule['schedule'][i];
+                stops = train['Predictions'];
+                for (var j =0; j < stops.length; j++) {
+                    if (stops[j]['Stop'] == name) {
+                      time = stops[j]['Seconds'] + " secs.";
+                      destination = train['Destination'];
+                      content += '<tr><td>' + tSchedule.line + '</td><td>' + train['TripID'] + '</td><td>' + destination 
+                      + '</td><td>' + time + '</td></tr>';
+                    }
+                }
+            }
+            content += '</table>';
+
             infowindow.setContent(marker.title + content);
             infowindow.open(map, marker);
       });
@@ -560,26 +588,16 @@ function requestSchedule() {
     request.send(null);
 }
 
+var trip;
+
 function dataReady() {
     if (request.readyState == 4 && request.status == 200) {
         tSchedule = JSON.parse(request.responseText);
         rodeoLine = tSchedule.line;
-        content = '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
-        tSchedule.schedule.forEach (function () {
-          content += '<tr><td>' + this['TripID'] + '</td>';
-          content += '<td>' + this['Destination'] + '</td>';
-          // this.Predictions.forEach(function() {
-          //   if (this['Stop'] == haversine) {content += '<td>' + this['Seconds'] + '</td>';}
-          // });
-        });
-
-        // tSchedule.schedule.forEach(function () {
-        //   content += '<tr><td>' + tSchedule.line + '</td><td>' + this['TripID'] + '</td><td>' + this['Destination'] + '</td><td>';
-        // });
-        content += '</table>';
+        findClosestStation();
         makeStations();
         makeLines();
     } else if (request.readyState == 4 && request.status == 500) {
-        content += "Internal Error";
+        requestSchedule();
     }
 }
