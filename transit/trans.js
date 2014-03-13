@@ -11,6 +11,7 @@ var map;
 var selfMarker;
 var infowindow = new google.maps.InfoWindow();
 var image = 'T.png';
+var request;
 
 function init() {
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
@@ -19,9 +20,11 @@ function init() {
 
 function getMyLocation() {
     if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(function(position) {
+        navigator.geolocation.getCurrentPosition(function (position) {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
+            findClosestStation();
+            findClosestLine();
             renderMap();
         });
     }
@@ -37,7 +40,8 @@ function renderMap() {
 
     selfMarker = new google.maps.Marker({
             position: me,
-            title: "Here I Am!"
+            title:"Closest Station: " + haversine + " Station, it is " + stationDist.toFixed(2) + " miles away."
+             + "</br>" + "Closest Line: " + haversineLine + " Line"
         });
     selfMarker.setMap(map);
 
@@ -45,8 +49,6 @@ function renderMap() {
             infowindow.setContent(selfMarker.title);
             infowindow.open(map, selfMarker);
         });
-    findClosestStation();
-    findClosestLine();
     makeLines();
     makeStations();
 }
@@ -421,6 +423,7 @@ var parsedLines = [
 
 var haversine;
 var haversineLine;
+var stationDist;
 
 Number.prototype.toRad = function() {
     return this * Math.PI / 180;
@@ -464,6 +467,7 @@ function findClosestLine() {
             minDist = station.distance;
             haversine = station.Station;
             haversineLine = station.Line;
+            stationDist = minDist;
         }
     });
 }
@@ -510,11 +514,16 @@ function makeStations() {
             var place = new google.maps.LatLng(station.Latitude, station.Longitude);
             var name = station.Station;
             var marker = new google.maps.Marker({
-                            position: place,
-                            title: name,
-                            icon: image
-                        });
+                        position: place,
+                        title: name + " (about " + station.distance.toFixed(2) + " miles away)",
+                        icon: image
+                    });
             marker.setMap(map);
+
+            google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(marker.title);
+            infowindow.open(map, marker);
+        });
         }
     });
 }
