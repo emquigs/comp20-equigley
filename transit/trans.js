@@ -13,11 +13,11 @@ var infowindow = new google.maps.InfoWindow();
 var image = 'T.png';
 var request = new XMLHttpRequest();
 var tSchedule;
+var content;
 
 function init() {
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
     getMyLocation();
-    requestInit();
 }
 
 function getMyLocation() {
@@ -25,8 +25,8 @@ function getMyLocation() {
         navigator.geolocation.getCurrentPosition(function (position) {
             lat = position.coords.latitude;
             lng = position.coords.longitude;
+            requestSchedule();
             findClosestStation();
-            findClosestLine();
             renderMap();
         });
     }
@@ -42,8 +42,7 @@ function renderMap() {
 
     selfMarker = new google.maps.Marker({
             position: me,
-            title:"Closest Station: " + haversine + " Station, it is " + stationDist.toFixed(2) + " miles away."
-             + "</br>" + "Closest Line: " + haversineLine + " Line"
+            title:"Closest Station: <strong>" + haversine + " Station</strong>, it is " + stationDist.toFixed(2) + " miles away."
         });
     selfMarker.setMap(map);
 
@@ -51,8 +50,6 @@ function renderMap() {
             infowindow.setContent(selfMarker.title);
             infowindow.open(map, selfMarker);
         });
-    makeLines();
-    makeStations();
 }
 
 var tLines = {};
@@ -431,7 +428,7 @@ var parsedLines = [
     ];
 
 var haversine;
-var haversineLine;
+var rodeoLine;
 var stationDist;
 
 Number.prototype.toRad = function() {
@@ -456,9 +453,10 @@ function findClosestStation() {
         station["distance"] = d;
 
     });
+    findClosest();
 }
 
-function findClosestLine() {
+function findClosest() {
 
     var maxDist = 0;
 
@@ -475,7 +473,6 @@ function findClosestLine() {
         if (minDist > station.distance) {
             minDist = station.distance;
             haversine = station.Station;
-            haversineLine = station.Line;
             stationDist = minDist;
         }
     });
@@ -506,15 +503,12 @@ function makeLines() {
         }
     });
 
-    tLines["Blue"] = blueArr;
-    tLines["Orange"] = orangeArr;
-    tLines["Red"] = redArr;
-
-console.log(redArr);
-console.log(redArr2);
+    tLines["blue"] = blueArr;
+    tLines["orange"] = orangeArr;
+    tLines["red"] = redArr;
 
     for (color in tLines) {
-        if (color == haversineLine) {
+        if (color == rodeoLine) {
             Path = new google.maps.Polyline({
                 path: tLines[color],
                 geodesic: true,
@@ -539,26 +533,28 @@ console.log(redArr2);
 
 function makeStations() {
 
-    parsedLines.forEach(function (station) {
-        if (station.Line == haversineLine) {
-            var place = new google.maps.LatLng(station.Latitude, station.Longitude);
-            var name = station.Station;
-            var marker = new google.maps.Marker({
-                        position: place,
-                        title: name + " (about " + station.distance.toFixed(2) + " miles away)",
-                        icon: image
-                    });
-            marker.setMap(map);
+  rodeoline = rodeoLine.charAt(0).toUpperCase() + rodeoLine.substring(1);
+  parsedLines.forEach(function (station) {
+      if (station.Line == rodeoline) {
+          var place = new google.maps.LatLng(station.Latitude, station.Longitude);
+          var name = station.Station;
+          var marker = new google.maps.Marker({
+                      position: place,
+                      title: "<strong>" + name + "</strong> (about <strong>" 
+                        + station.distance.toFixed(2) + "</strong> miles away)",
+                      icon: image
+                  });
+          marker.setMap(map);
 
-            google.maps.event.addListener(marker, 'click', function() {
-            infowindow.setContent(marker.title);
+          google.maps.event.addListener(marker, 'click', function() {
+            infowindow.setContent(marker.title + content);
             infowindow.open(map, marker);
-        });
-        }
-    });
+      });
+      }
+  });
 }
 
-function requestInit() {
+function requestSchedule() {
     request.open("get", "http://mbtamap.herokuapp.com/mapper/rodeo.json", true);
     request.onreadystatechange = dataReady;
     request.send(null);
@@ -567,8 +563,23 @@ function requestInit() {
 function dataReady() {
     if (request.readyState == 4 && request.status == 200) {
         tSchedule = JSON.parse(request.responseText);
-        console.log(tSchedule["line"]);
+        rodeoLine = tSchedule.line;
+        content = '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
+        tSchedule.schedule.forEach (function () {
+          content += '<tr><td>' + this['TripID'] + '</td>';
+          content += '<td>' + this['Destination'] + '</td>';
+          // this.Predictions.forEach(function() {
+          //   if (this['Stop'] == haversine) {content += '<td>' + this['Seconds'] + '</td>';}
+          // });
+        });
+
+        // tSchedule.schedule.forEach(function () {
+        //   content += '<tr><td>' + tSchedule.line + '</td><td>' + this['TripID'] + '</td><td>' + this['Destination'] + '</td><td>';
+        // });
+        content += '</table>';
+        makeStations();
+        makeLines();
     } else if (request.readyState == 4 && request.status == 500) {
-        console.log("Loading...");
+        content += "Internal Error";
     }
 }
