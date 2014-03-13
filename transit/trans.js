@@ -42,7 +42,7 @@ function renderMap() {
 
     selfMarker = new google.maps.Marker({
             position: me,
-            title:"Closest Station: <strong>" + haversine + " Station</strong>, it is " + stationDist.toFixed(2) + " miles away."
+            title:"Closest Station: <strong>" + haversine + "</strong>, it is " + stationDist.toFixed(2) + " miles away."
         });
     selfMarker.setMap(map);
 
@@ -520,7 +520,7 @@ function makeLines() {
                 geodesic: true,
                 strokeColor: String(color),
                 strokeOpacity: 5.0,
-                strokeWeight: 2
+                strokeWeight: 4
             });
             Path.setMap(map);
             if (color == "red") {
@@ -529,7 +529,7 @@ function makeLines() {
                 geodesic: true,
                 strokeColor: String(color),
                 strokeOpacity: 5.0,
-                strokeWeight: 2
+                strokeWeight: 4
               });
             redPath2.setMap(map);
             }
@@ -559,8 +559,7 @@ function makeStations() {
 
           google.maps.event.addListener(marker, 'click', function() {
 
-            content = '<table id="schedule"><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
-            content.id = "schedule";
+            content = '<table><tr><th>Line</th><th>Trip #</th><th>Direction</th><th>Time Remaining</th></tr>';
             for (var i = 0; i < tSchedule['schedule'].length; i++) {
                 train = tSchedule['schedule'][i];
                 stops = train['Predictions'];
