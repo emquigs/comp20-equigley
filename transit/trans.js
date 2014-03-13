@@ -10,6 +10,7 @@ var myOptions = {
 var map;
 var selfMarker;
 var infowindow = new google.maps.InfoWindow();
+var image = 'T.png';
 
 function init() {
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
@@ -44,15 +45,14 @@ function renderMap() {
             infowindow.setContent(selfMarker.title);
             infowindow.open(map, selfMarker);
         });
+    findClosestStation();
+    findClosestLine();
     makeLines();
     makeStations();
 }
 
 var tLines = {};
-var parsedLines = [];
-
-function makeLines() {
-    parsedLines = [
+var parsedLines = [
       {
         "Line":"Blue",
         "Station":"Airport",
@@ -419,6 +419,57 @@ function makeLines() {
       // }
     ];
 
+var haversine;
+var haversineLine;
+
+Number.prototype.toRad = function() {
+    return this * Math.PI / 180;
+}
+
+function findClosestStation() {
+
+    parsedLines.forEach(function (station) {
+
+        var R = 6371;
+        var dLat = (lat-station.Latitude).toRad();
+        var dLon = (lng-station.Longitude).toRad();
+        var lat1 = station.Latitude.toRad();
+        var lat2 = lng.toRad();
+
+        var a = Math.sin(dLat/2) * Math.sin(dLat/2) +
+            Math.sin(dLon/2) * Math.sin(dLon/2) * Math.cos(lat1) * Math.cos(lat2); 
+        var c = 2 * Math.atan2(Math.sqrt(a), Math.sqrt(1-a)); 
+        var d = R * c;
+
+        station["distance"] = d;
+
+    });
+}
+
+function findClosestLine() {
+
+    var maxDist = 0;
+
+    parsedLines.forEach(function (station) {
+        if (maxDist < station.distance) {
+            maxDist = station.distance;
+        }
+    });
+
+    var minDist = maxDist;
+
+    parsedLines.forEach(function (station) {
+
+        if (minDist > station.distance) {
+            minDist = station.distance;
+            haversine = station.Station;
+            haversineLine = station.Line;
+        }
+    });
+}
+
+function makeLines() {
+
     var blueArr = [];
     var orangeArr = [];
     var redArr = [];
@@ -433,32 +484,38 @@ function makeLines() {
         }
     });
 
-    tLines["blue"] = blueArr;
-    tLines["orange"] = orangeArr;
-    tLines["red"] = redArr;
+    tLines["Blue"] = blueArr;
+    tLines["Orange"] = orangeArr;
+    tLines["Red"] = redArr;
 
 
     for (color in tLines) {
-        Path = new google.maps.Polyline({
-            path: tLines[color],
-            geodesic: true,
-            strokeColor: String(color),
-            strokeOpacity: 5.0,
-            strokeWeight: 2
-          });
-        Path.setMap(map);
+        if (color == haversineLine) {
+            Path = new google.maps.Polyline({
+                path: tLines[color],
+                geodesic: true,
+                strokeColor: String(color),
+                strokeOpacity: 5.0,
+                strokeWeight: 2
+            });
+            Path.setMap(map);
+        }
     }
 }
 
 function makeStations() {
 
     parsedLines.forEach(function (station) {
-        var place = new google.maps.LatLng(station.Latitude, station.Longitude);
-        var name = station.Station;
-        var marker = new google.maps.Marker({
-                        position: place,
-                        title: name
-                    });
-    marker.setMap(map);
-    })
+        if (station.Line == haversineLine) {
+            var place = new google.maps.LatLng(station.Latitude, station.Longitude);
+            var name = station.Station;
+            var marker = new google.maps.Marker({
+                            position: place,
+                            title: name,
+                            icon: image
+                        });
+            marker.setMap(map);
+        }
+    });
 }
+
