@@ -3,19 +3,21 @@ var lng = -99999;
 
 var me = new google.maps.LatLng(lat, lng);
 var myOptions = {
-                    zoom: 13,
-                    center: me,
+      zoom: 13,
+      center: me,
 };
 
 var map;
 var selfMarker;
 var infowindow = new google.maps.InfoWindow();
 var image = 'T.png';
-var request;
+var request = new XMLHttpRequest();
+var tSchedule;
 
 function init() {
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
     getMyLocation();
+    requestInit();
 }
 
 function getMyLocation() {
@@ -286,18 +288,20 @@ var parsedLines = [
         "Longitude":-71.057655,
         "number": 11
       },
-      // {
-      //   "Line":"Red",
-      //   "Station":"Ashmont",
-      //   "Latitude":42.284652,
-      //   "Longitude":-71.06448899999999
-      // },
-      // {
-      //   "Line":"Red",
-      //   "Station":"Braintree",
-      //   "Latitude":42.2078543,
-      //   "Longitude":-71.0011385
-      // },
+      {
+        "Line":"Red",
+        "Station":"Ashmont",
+        "Latitude":42.284652,
+        "Longitude":-71.06448899999999,
+        "number": 21
+      },
+      {
+        "Line":"Red",
+        "Station":"Braintree",
+        "Latitude":42.2078543,
+        "Longitude":-71.0011385,
+        "number": 18
+      },
       {
         "Line":"Red",
         "Station":"Broadway",
@@ -333,12 +337,13 @@ var parsedLines = [
         "Longitude":-71.060225,
         "number": 8
       },
-      // {
-      //   "Line":"Red",
-      //   "Station":"Fields Corner",
-      //   "Latitude":42.300093,
-      //   "Longitude":-71.061667
-      // },
+      {
+        "Line":"Red",
+        "Station":"Fields Corner",
+        "Latitude":42.300093,
+        "Longitude":-71.061667,
+        "number": 19
+      },
       {
         "Line":"Red",
         "Station":"Harvard Square",
@@ -360,12 +365,13 @@ var parsedLines = [
         "Longitude":-71.08617653,
         "number": 5
       },
-      // {
-      //   "Line":"Red",
-      //   "Station":"North Quincy",
-      //   "Latitude":42.275275,
-      //   "Longitude":-71.029583
-      // },
+      {
+        "Line":"Red",
+        "Station":"North Quincy",
+        "Latitude":42.275275,
+        "Longitude":-71.029583,
+        "number": 14
+      },
       {
         "Line":"Red",
         "Station":"Park Street",
@@ -380,18 +386,20 @@ var parsedLines = [
         "Longitude":-71.11914899999999,
         "number": 2
       },
-      // {
-      //   "Line":"Red",
-      //   "Station":"Quincy Adams",
-      //   "Latitude":42.233391,
-      //   "Longitude":-71.007153
-      // },
-      // {
-      //   "Line":"Red",
-      //   "Station":"Quincy Center",
-      //   "Latitude":42.251809,
-      //   "Longitude":-71.005409
-      // },
+      {
+        "Line":"Red",
+        "Station":"Quincy Adams",
+        "Latitude":42.233391,
+        "Longitude":-71.007153,
+        "number":  17
+      },
+      {
+        "Line":"Red",
+        "Station":"Quincy Center",
+        "Latitude":42.251809,
+        "Longitude":-71.005409,
+        "number": 16
+      },
       {
         "Line":"Red",
         "Station":"Savin Hill",
@@ -399,12 +407,13 @@ var parsedLines = [
         "Longitude":-71.053331,
         "number": 13
       },
-      // {
-      //   "Line":"Red",
-      //   "Station":"Shawmut",
-      //   "Latitude":42.29312583,
-      //   "Longitude":-71.06573796000001
-      // },
+      {
+        "Line":"Red",
+        "Station":"Shawmut",
+        "Latitude":42.29312583,
+        "Longitude":-71.06573796000001,
+        "number": 20
+      },
       {
         "Line":"Red",
         "Station":"South Station",
@@ -412,13 +421,13 @@ var parsedLines = [
         "Longitude":-71.05524200000001,
         "number": 9
       },
-      // {
-      //   "Line":"Red",
-      //   "Station":"Wollaston",
-      //   "Latitude":42.2665139,
-      //   "Longitude":-71.0203369,
-      //   "number":
-      // }
+      {
+        "Line":"Red",
+        "Station":"Wollaston",
+        "Latitude":42.2665139,
+        "Longitude":-71.0203369,
+        "number": 15
+      }
     ];
 
 var haversine;
@@ -477,6 +486,7 @@ function makeLines() {
     var blueArr = [];
     var orangeArr = [];
     var redArr = [];
+    var redArr2 = [];
 
     parsedLines.forEach(function (station) {
         if (station.Line == "Blue") {
@@ -484,7 +494,15 @@ function makeLines() {
         } else if (station.Line == "Orange") {
             orangeArr[station.number] = new google.maps.LatLng(station.Latitude, station.Longitude);
         } else if (station.Line == "Red") {
-            redArr[station.number] = new google.maps.LatLng(station.Latitude, station.Longitude);
+            if (station.number == 13) {
+              redArr2[0] = new google.maps.LatLng(station.Latitude, station.Longitude);
+            }
+            if (station.number > 18) {
+              redArr2[station.number - 18] = new google.maps.LatLng(station.Latitude, station.Longitude);
+            }
+            if (station.number < 19) {
+              redArr[station.number] = new google.maps.LatLng(station.Latitude, station.Longitude);
+            }
         }
     });
 
@@ -492,6 +510,8 @@ function makeLines() {
     tLines["Orange"] = orangeArr;
     tLines["Red"] = redArr;
 
+console.log(redArr);
+console.log(redArr2);
 
     for (color in tLines) {
         if (color == haversineLine) {
@@ -503,6 +523,16 @@ function makeLines() {
                 strokeWeight: 2
             });
             Path.setMap(map);
+            if (color == "Red") {
+              redPath2 = new google.maps.Polyline({
+                path: redArr2,
+                geodesic: true,
+                strokeColor: String(color),
+                strokeOpacity: 5.0,
+                strokeWeight: 2
+              });
+            redPath2.setMap(map);
+            }
         }
     }
 }
@@ -528,3 +558,17 @@ function makeStations() {
     });
 }
 
+function requestInit() {
+    request.open("get", "http://mbtamap.herokuapp.com/mapper/rodeo.json", true);
+    request.onreadystatechange = dataReady;
+    request.send(null);
+}
+
+function dataReady() {
+    if (request.readyState == 4 && request.status == 200) {
+        tSchedule = JSON.parse(request.responseText);
+        console.log(tSchedule["line"]);
+    } else if (request.readyState == 4 && request.status == 500) {
+        console.log("Loading...");
+    }
+}
