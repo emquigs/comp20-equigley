@@ -587,8 +587,6 @@ function requestSchedule() {
     request.send(null);
 }
 
-var trip;
-
 function dataReady() {
     if (request.readyState == 4 && request.status == 200) {
         tSchedule = JSON.parse(request.responseText);
