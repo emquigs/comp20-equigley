@@ -8,7 +8,8 @@ README.txt - Lab 7 - Status Updates in Local Storage
 
 1. Update: All messages get stored in local storage and then reappear in profile.html page when loaded (function is
    called on load). This has been implemented correctly.
-2. Emily Taintor helped me get started on this lab part 1
+2. I recieved help from Emily Taintor in accessing local storage for Part 1, and helped her with file storage
+   locations in Part 2
 3. This lab took me about 2 hours to complete.
 
-Node.js URL: 
+Node.js URL: http://sleepy-dusk-3845.herokuapp.com/
