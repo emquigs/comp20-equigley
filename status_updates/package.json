@@ -1,0 +1,27 @@
+{
+  "name": "status_updates",
+  "version": "0.0.0",
+  "description": "Example of node",
+  "main": "web.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tuftsdev/comp20-equigley.git"
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
+  "author": "Emily Quigley",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/tuftsdev/comp20-equigley/issues"
+  },
+  "homepage": "https://github.com/tuftsdev/comp20-equigley",
+  "dependencies": {
+    "logfmt": "~1.1.2",
+    "express": "~3.5.1"
+  }
+}
