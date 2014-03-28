@@ -13,21 +13,42 @@
 			var year=date.getFullYear();
 			var hour=date.getHours();
 			var minute=date.getMinutes();
+			var timeStamp=month+"/"+day+"/"+year+" "+hour+":"+minute+" - ";
+			var seconds=date.getSeconds();
+			var timeStore=month+"/"+day+"/"+year+" "+hour+":"+minute+seconds;
 
 		var msg=document.getElementById("msg").value;
+		var status=timeStamp+msg;
 		var para=document.createElement("p");
-		var node=document.createTextNode(month+"/"+day+"/"+year+" "+hour+":"+minute+" - "+msg);
+		var node=document.createTextNode(status);
 		para.appendChild(node);
 		
 		var updateList=document.getElementById('status');
 		updateList.insertBefore(para, updateList.childNodes[0]);
 
 		document.getElementById("msg").value = "";
+		store(timeStore, status);
+	}
+
+	function store(timeStore, status) {
+		localStorage[timeStore] = status;
+	}
+
+	function initPosts() {
+		for (post in localStorage) {
+			var statusMsg=localStorage[post];
+			var para=document.createElement("p");
+			var node=document.createTextNode(statusMsg);
+			para.appendChild(node);
+			
+			var updateList=document.getElementById('status');
+			updateList.insertBefore(para, updateList.childNodes[0]);
+		}
 	}
 </script>
 </head>
 
-<body>
+<body onload="initPosts()">
 	<h1>Fecebook</h1>
 	<div id="nav">
 		<ul>

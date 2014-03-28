@@ -8,7 +8,7 @@ p {
 	text-align: center;
 }
 
-#sections {
+.sections {
 	background-color: rgba(255,255,255,0.80);
 	border-radius: 30px;
 	border: 1px solid black;
@@ -20,6 +20,6 @@ p {
 	padding-right: 300px;
 }
 
-#sectionText{
+.sectionText{
 	margin-right: 20px;
 }
