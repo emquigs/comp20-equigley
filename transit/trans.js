@@ -41,6 +41,17 @@ function renderMap() {
     me = new google.maps.LatLng(lat, lng);
 
     map.panTo(me);
+
+    selfMarker = new google.maps.Marker({
+            position: me,
+            title:"Closest Station: <strong>" + haversine + "</strong>, it is " + stationDist.toFixed(2) + " miles away."
+        });
+    selfMarker.setMap(map);
+
+    google.maps.event.addListener(selfMarker, 'click', function() {
+            infowindow.setContent(selfMarker.title + errorMessage);
+            infowindow.open(map, selfMarker);
+        });
 }
 
 var tLines = {};
@@ -472,17 +483,7 @@ function findClosest() {
       }
     }
   });
-  selfMarker = new google.maps.Marker({
-          position: me,
-          title:"Closest Station: <strong>" + haversine + "</strong>, it is " + stationDist.toFixed(2) + " miles away."
-      });
-  selfMarker.setMap(map);
-
-  google.maps.event.addListener(selfMarker, 'click', function() {
-          infowindow.setContent(selfMarker.title + errorMessage);
-          infowindow.open(map, selfMarker);
-      });
-renderMap();
+  renderMap();
 }
 
 function makeLines() {
