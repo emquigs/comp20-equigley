@@ -3,16 +3,10 @@ var lng = -99999;
 
 var me = new google.maps.LatLng(lat, lng);
 var myOptions = {
-                    zoom: 8,
+                    zoom: 13,
                     center: me,
 };
 
-var map;
-var marker;
-var infowindow = new google.maps.InfoWindow();
-      zoom: 13,
-      center: me,
-};
 
 var map;
 var selfMarker;
@@ -25,7 +19,6 @@ var content;
 function init() {
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
     getMyLocation();
-    }
 }
 
 function getMyLocation() {
