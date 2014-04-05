@@ -482,6 +482,7 @@ function findClosest() {
           infowindow.setContent(selfMarker.title + errorMessage);
           infowindow.open(map, selfMarker);
       });
+renderMap();
 }
 
 function makeLines() {
