@@ -32,6 +32,7 @@ function getMyLocation() {
     else {
         alert("Sorry, geolocation is not supported by your web browser.  -MGMT");
     }
+    renderMap();
 }
 
 var errorMessage = "";
