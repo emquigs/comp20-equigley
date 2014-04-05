@@ -3,7 +3,6 @@ var lng = -99999;
 
 var me = new google.maps.LatLng(lat, lng);
 var myOptions = {
-<<<<<<< HEAD
                     zoom: 8,
                     center: me,
 };
@@ -11,7 +10,6 @@ var myOptions = {
 var map;
 var marker;
 var infowindow = new google.maps.InfoWindow();
-=======
       zoom: 13,
       center: me,
 };
@@ -23,16 +21,12 @@ var image = 'T.png';
 var request = new XMLHttpRequest();
 var tSchedule;
 var content;
->>>>>>> gh-pages
 
 function init() {
     map = new google.maps.Map(document.getElementById("map-canvas"), myOptions);
     getMyLocation();
-<<<<<<< HEAD
     }
-=======
 }
->>>>>>> gh-pages
 
 function getMyLocation() {
     if (navigator.geolocation) {
@@ -45,22 +39,16 @@ function getMyLocation() {
     else {
         alert("Sorry, geolocation is not supported by your web browser.  -MGMT");
     }
-<<<<<<< HEAD
     renderMap();
-}
-
-=======
 }
 
 var errorMessage = "";
 
->>>>>>> gh-pages
 function renderMap() {
     me = new google.maps.LatLng(lat, lng);
 
     map.panTo(me);
 
-<<<<<<< HEAD
     marker = new google.maps.Marker({
             position: me,
             title: "Here I Am!"
@@ -72,7 +60,6 @@ function renderMap() {
             infowindow.open(map, marker);
         });
 
-=======
     selfMarker = new google.maps.Marker({
             position: me,
             title:"Closest Station: <strong>" + haversine + "</strong>, it is " + stationDist.toFixed(2) + " miles away."
@@ -630,5 +617,4 @@ function dataReady() {
     } else if (request.readyState == 4 && request.status == 500) {
         requestSchedule();
     }
->>>>>>> gh-pages
 }
