@@ -36,12 +36,14 @@ function getMyLocation() {
 }
 
 var errorMessage = "";
+var function_count = 0;
 
 function renderMap() {
     me = new google.maps.LatLng(lat, lng);
 
     map.panTo(me);
 
+  if (function_count != 0) {
     selfMarker = new google.maps.Marker({
             position: me,
             title:"Closest Station: <strong>" + haversine + "</strong>, it is " + stationDist.toFixed(2) + " miles away."
@@ -52,6 +54,8 @@ function renderMap() {
             infowindow.setContent(selfMarker.title + errorMessage);
             infowindow.open(map, selfMarker);
         });
+  }
+  function_count++;
 }
 
 var tLines = {};
