@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+	<title>Security Assessment</title>
+	<link href="security.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+	
+	<h1>Security Assessment: <a href="http://warm-fjord-7835.herokuapp.com/"> 2048 Gamecenter</a> by <a href="http://dpasternak.github.io/">Dan Pasternak</a></h1>
+	
+		<p>Report by: <a href="http://emquigs.github.io/"> Emily Quigley</a> &bull; 4/24/2014</p>
+
+	<h2>Introduction</h2>
+
+		<p>This is a report of the potential security risks found in the project "2048 Gamecenter", created by @dpasternak for Assignment 4. This assignment called for students to build an API that can handle POST requests from the 2048 game that include the username, score, and final grid of the ended game, GET requests that render a top scoreboard of all the data found in the gamecenter, and GET requests that render all submitted scores of a queried username.</p>
+
+		<p>In conducting this analysis, I found several areas where security breaches could easily be accomplished. The results are highlighted below.</p>
+
+	<h2>Methodology</h2>
+
+		<p>Description of tools and what you did. I first did "black-box" testing that entailed running security tests solely using the project's URL. I used tools such as the Mozilla Firefox plugin <a href="https://addons.mozilla.org/en-US/firefox/addon/tamper-data/">TamperData</a> and curl to carry out these tests. I then did an analysis of the API's source code.</p>
+
+	<h2>Abstract of Findings</h2>
+
+		<p>Provide an overview of all the security issues you identified. This section should be written for non-technical managers who do not have technical expertise and do not have time to read the entire document. Write this section using lay language.</p>
+
+	<h2>Issues Found</h2>
+		<h3>Issue: Cross-Cross-Site Scripting</h3>
+		<h3>Affects GET page of API</h3>
+		<h3>Severity of issue: HIGH</h3>
+			<p></p>
+		<h3>Description:</h3>
+			<p></P>
+		<h3>Proof</h3>
+		<h3>Resolution</h3>
+
+		<h3>Issue: Database Injection</h3>
+		<h3>Affects GET page of API</h3>
+		<h3>Severity of issue: MEDIUM</h3>
+			<p></p>
+		<h3>Description:</h3>
+			<p>By using curl to send a scipt tag as the "grid" input, it is possible to inject JavaScript code into the database. This is a problem because when a visitor to the page sends the GET request, they could end up finding another page, an inapropriate video/image, etc.</P>
+		<h3>Proof</h3>
+			<p>When I performed this hack, I redirected the page to the "What does the fox say" video on youtube, but this is just a tame example of what could be inserted into the database.</p>
+			<img src="terminal1.png">
+			<img src="youtube.png">
+		<h3>Resolution</h3>
+			<p></p>
+
+	<h2>Conclusion</h2>
+
+		<p>I would advise my client to continue to update his application to keep up with the latest security tools. Security is usually reactive, and based on the high vulnerability of my client's product, it would be pertinent for him to start being proactive in his techniques.</p>
+</body>
+
+</html>
