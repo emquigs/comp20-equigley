@@ -1,10 +1,21 @@
 body {
 	font-family: 'Lucida Sans';
+	background-color: #f9e788;
 }
 a {
 	text-decoration: underline;
-	color: gray;
+	color: #ab8240;
 }
-img {
+h1, #byline {
 	text-align: center;
+}
+.text {
+	background-color: rgba(255,255,255,0.55);
+	border-radius: 4px;
+	margin-left: 150px;
+	margin-right: 150px;
+	padding: 10px;
+}
+.issue-type {
+	text-decoration: underline;
 }
