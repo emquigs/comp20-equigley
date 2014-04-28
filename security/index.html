@@ -25,22 +25,14 @@
 
 	<h2>Abstract of Findings</h2>
 
-		<p>Provide an overview of all the security issues you identified. This section should be written for non-technical managers who do not have technical expertise and do not have time to read the entire document. Write this section using lay language.</p>
+		<p>The vulnerabilities I found in this API were due to the creator relying too much on the innocence of clients. This would be fine if all clients were rational internet users who just wanted a place to keep track of their 2048 scores, but sadly the state of today's web-surfers is not so well-mannered. The gamecenter can handle normal score submissions and view requests, but is vulnerable to hackers to put harmful information and content into the site's function. Because many people will attempt to invade this site to expose these vulnerabilities, I would not advise my client to publicize his site until he fixes his security flaws.</p>
 
 	<h2>Issues Found</h2>
-		<h3>Issue: Cross-Cross-Site Scripting</h3>
-		<h3>Affects GET page of API</h3>
-		<h3>Severity of issue: HIGH</h3>
-			<p></p>
-		<h3>Description:</h3>
-			<p></P>
-		<h3>Proof</h3>
-		<h3>Resolution</h3>
 
-		<h3>Issue: Database Injection</h3>
+		<h3>Issue: Database Injection/Cross-Cross-Site Scripting (XSS)</h3>
 		<h3>Affects GET page of API</h3>
 		<h3>Severity of issue: MEDIUM</h3>
-			<p></p>
+			<p>This issue is of Medium risk because although it poses a high threat to unsuspecting visitors to the API, it is reversible by a deletion in the Mongo DB by the database owner.</p>
 		<h3>Description:</h3>
 			<p>By using curl to send a scipt tag as the "grid" input, it is possible to inject JavaScript code into the database. This is a problem because when a visitor to the page sends the GET request, they could end up finding another page, an inapropriate video/image, etc.</P>
 		<h3>Proof</h3>
@@ -48,11 +40,23 @@
 			<img src="terminal1.png">
 			<img src="youtube.png">
 		<h3>Resolution</h3>
-			<p></p>
+			<p>This attack can be fixed retroactively by deleting the harmful databse infections from the database when viewed on the heroku/mongolab site, but could also be prevented proactively by verifying the type of information being put into the database is a string. </p>
+
+		<h3>Issue: Database Injection</h3>
+		<h3>Affects GET page of API</h3>
+		<h3>Severity of issue: LOW</h3>
+			<p>This issue is of low risk because it does not actually pose any "danger" to the client, as it merely invalidates the legitimacy of the 2048 Gamecenter High Scoreboard homepage rather than host harmful content.</p>
+		<h3>Description:</h3>
+			<p>This hack is pretty benign, in that it can't actually affect the API's function or viewer experience. However, it does make the purpose of the app invalid since it allows the hacker to place his own score and grid in the scoreboard with whatever score he/she wants, whether it is 1 or 1 billion.</P>
+		<h3>Proof</h3>
+			<p>To perform this hack, I tried inserting a score with an invalid grid and username but score of 100000000, and it was accepted by the API.</p>
+			<img src="terminal2.png">
+		<h3>Resolution</h3>
+			<p>The resolution to this problem would be to require an API key when the score is submitted, so that the API knows the data is coming from a game submission and not a fake one.</p>
 
 	<h2>Conclusion</h2>
 
-		<p>I would advise my client to continue to update his application to keep up with the latest security tools. Security is usually reactive, and based on the high vulnerability of my client's product, it would be pertinent for him to start being proactive in his techniques.</p>
+		<p>I would advise my client to continue to update his application to keep up with the latest security tools. Based on the high vulnerability of my client's product, it would be pertinent for him to start being proactive in his techniques.</p>
 </body>
 
 </html>
